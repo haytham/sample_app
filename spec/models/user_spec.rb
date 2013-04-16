@@ -13,10 +13,15 @@ require 'spec_helper'
 
 describe User do
 
-	before { @user = User.new(  name: "Example User", 
-								email: "user@example.com",
-								password: "foobar",
-								password_confirmation: "foobar" ) }
+	#before { @user = User.new(  name: "Example User", 
+	#							email: "user@example.com",
+	#							password: "foobar",
+	#							password_confirmation: "foobar" ) }
+
+	before do
+		@user = User.new( name: "Example User", email: "user@example.com", 
+					password: "foobar", password_confirmation: "foobar" )
+	end
 
 	subject { @user }
 
@@ -25,6 +30,7 @@ describe User do
 	it { should respond_to( :password_digest ) }
 	it { should respond_to( :password ) }
 	it { should respond_to( :password_confirmation ) }
+	it { should respond_to( :remember_token ) }
 
 	# authentication tests
 	it { should respond_to( :authenticate ) }
@@ -126,6 +132,15 @@ describe User do
 		end
 
 		it { should_not be_valid }
+	end
+
+	describe "remember token" do
+		before { @user.save }
+		# its method applies teh test to given attribute
+		# instead of the subject of the test
+		its(:remember_token) { should_not be_blank }
+		# equivalent to
+		#it { @user.remember_token should_not be_blank }
 	end
   #pending "add some examples to (or delete) #{__FILE__}"
 end

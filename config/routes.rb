@@ -1,12 +1,18 @@
 SampleApp::Application.routes.draw do
   #get "users/new"
   resources :users
+  resources :sessions, only: [:new, :create, :destroy]
 
   #get "static_pages/home"
   # special rule for root path
   root to: 'static_pages#home'
 
   match '/signup', to: 'users#new'
+
+  # sign in / out
+  match '/signin', to: 'sessions#new'
+  # via: :delete -> needs to be invoked using http DELETE request
+  match '/signout', to: 'sessions#destroy', via: :delete
 
   #get "static_pages/help"
   #get "static_pages/about"

@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
 	# that is they are all in the same case
 	# {} => we are passing a code block
 	before_save { |user| user.email =  email.downcase }
+	before_save :create_remember_token
 
 	validates :name, presence: true, length: { maximum: 50 }
 	
@@ -28,4 +29,12 @@ class User < ActiveRecord::Base
 						uniqueness: { case_sensitive: false }
 	validates :password, presence: true, length: { minimum: 6 }
 	validates :password_confirmation, presence: true
+
+	private 
+		def create_remember_token
+			# create token
+			# Use self here else the assignment
+			# would create a local variable called remember_token
+			self.remember_token = SecureRandom.urlsafe_base64
+		end
 end
